@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from sqlalchemy import text
+from sqlalchemy import select, insert, update
 from whatsup.db import engine
+from whatsup.models.monitors import Monitor
 
 
 class MonitorBase(BaseModel):
@@ -42,11 +43,8 @@ monitors_router = APIRouter(prefix="/monitors", tags=["Monitors"])
 @monitors_router.get("/", response_model=MonitorsResponse)
 async def list_monitors():
     async with engine.connect() as session:
-        result = await session.execute(
-            text("SELECT id, name, url, status FROM monitors")
-        )
-        monitors = await result.fetchall()
-
+        result = await session.execute(select(Monitor))
+        monitors = result.scalars().all()
     return MonitorsResponse(
         monitors=[MonitorBase.model_validate(monitor) for monitor in monitors],
     )
