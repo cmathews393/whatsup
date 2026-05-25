@@ -30,9 +30,7 @@ class HttpCheckType(Enum):
 class Monitor(Base):
     __tablename__ = "monitors"
 
-    id: uuid.UUID = Column(
-        uuid.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: int = Column(int, primary_key=True, index=True)
     name: str = Column(String, nullable=False)
     url: str = Column(String, nullable=False)
     check_type: CheckType = Column(String, nullable=False)
