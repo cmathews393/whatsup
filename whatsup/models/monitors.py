@@ -1,7 +1,7 @@
 import uuid
 
 from whatsup.db import Base
-from sqlalchemy import Column, String
+from sqlalchemy import Column, Integer, String
 
 
 from enum import Enum
@@ -30,15 +30,19 @@ class HttpCheckType(Enum):
 class Monitor(Base):
     __tablename__ = "monitors"
 
-    id: int = Column(int, primary_key=True, index=True)
+    id: int = Column(Integer, primary_key=True, index=True)
     name: str = Column(String, nullable=False)
     url: str = Column(String, nullable=False)
     check_type: CheckType = Column(String, nullable=False)
     http_check_type: HttpCheckType = Column(String, nullable=True)
     expected_response: str = Column(String, nullable=True)
-    interval: int = Column(int, nullable=False, default=60)  # Check interval in seconds
+    interval: int = Column(
+        Integer,
+        nullable=False,
+        default=60,
+    )  # Check interval in seconds
     last_checked: int = Column(
-        int, nullable=True
+        Integer, nullable=True
     )  # Timestamp of the last check (epoch)
     status: str = Column(String, nullable=True)  # "up" or "down"
     error_message: str = Column(
